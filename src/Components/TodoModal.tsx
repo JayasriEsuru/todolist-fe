@@ -52,8 +52,11 @@ const TodoModal: React.FC<TodoModalProps> = ({
   }, [currentItem]);
 
   const onOkClick = () => {
-    if (updatedData?.activity !== "" && updatedData?.CompleteBy !== "") {
-      console.log({ updatedData });
+    if (
+      updatedData?.activity !== "" &&
+      updatedData?.CompleteBy &&
+      updatedData?.CompleteBy !== ""
+    ) {
       handleOk(updatedData);
       setUpdatedData(null);
     }

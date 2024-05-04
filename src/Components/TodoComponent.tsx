@@ -10,7 +10,7 @@ const TodoComponent = () => {
 
   const showModal = () => {
     setVisible(true);
-    setCurrentItem(null)
+    setCurrentItem(null);
   };
 
   useEffect(() => {
@@ -18,32 +18,30 @@ const TodoComponent = () => {
   }, []);
 
   const handleOk = (data: any) => {
-    console.log({currentItem})
-    
-const reqBody = {activity: data.activity, CompleteBy: data.CompleteBy}
-    if(!currentItem){
+    const reqBody = { activity: data.activity, CompleteBy: data.CompleteBy };
+    if (!currentItem) {
       axios
-      .post("http://localhost:5555/listItems/create", reqBody)
-      .then((response) => {
-        setVisible(false);
-        showAll();
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error("Error creating to-do:", error);
-      });
-    }else {
+        .post("http://localhost:5555/listItems/create", reqBody)
+        .then((response) => {
+          setVisible(false);
+          showAll();
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error creating to-do:", error);
+        });
+    } else {
       axios
-      .post(`http://localhost:5555/listItems/update/${data.id}`, data)
-      .then((response) => {
-        setVisible(false);
-        setCurrentItem(null)
-        showAll();
-      })
-      .catch((error) => {
-        // Handle any errors here
-        console.error("Error creating to-do:", error);
-      });
+        .post(`http://localhost:5555/listItems/update/${data.id}`, data)
+        .then((response) => {
+          setVisible(false);
+          setCurrentItem(null);
+          showAll();
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error("Error creating to-do:", error);
+        });
     }
   };
 
@@ -95,9 +93,9 @@ const reqBody = {activity: data.activity, CompleteBy: data.CompleteBy}
       key: "completedDate",
     },
     {
-      title: "completionTime",
-      dataIndex: "completionTime",
-      key: "completionTime",
+      title: "completedTime",
+      dataIndex: "completedTime",
+      key: "completedTime",
     },
     {
       render: (item: any) => (
