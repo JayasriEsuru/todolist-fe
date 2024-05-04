@@ -98,6 +98,7 @@ const TodoComponent = () => {
       key: "completedTime",
     },
     {
+      title: "Actions",
       render: (item: any) => (
         <Button
           onClick={() => {

@@ -68,8 +68,8 @@ const TodoModal: React.FC<TodoModalProps> = ({
 
   return (
     <Modal
-      title="ToDo"
-      visible={visible}
+      title={currentItem ? "Update Todo" : "Create Todo"}
+      open={visible}
       onOk={onOkClick}
       onCancel={() => {
         setVisible(false);
