@@ -39,7 +39,8 @@ const TodoModal: React.FC<TodoModalProps> = ({
   const [updatedData, setUpdatedData] = useState<DataInterface | null>(
     defaultData
   );
-  // const [data, setData] = useState<DataInterface | null>(null);
+
+  console.log({ updatedData });
 
   useEffect(() => {
     if (currentItem) {
@@ -51,19 +52,51 @@ const TodoModal: React.FC<TodoModalProps> = ({
     }
   }, [currentItem]);
 
+  let condition = updatedData?.activity !== "" && updatedData?.CompleteBy;
+  const condition1 =
+    updatedData?.status === "inprogress" &&
+    updatedData?.startedDate &&
+    updatedData?.startedTime;
+  const condition2 =
+    updatedData?.status === "completed" &&
+    updatedData?.completedDate &&
+    updatedData?.completedTime;
+
+  if (updatedData?.status === "inprogress") {
+    condition = condition1;
+  }
+  if (updatedData?.status === "completed") {
+    condition = condition2;
+  }
+
   const onOkClick = () => {
-    if (
-      updatedData?.activity !== "" &&
-      updatedData?.CompleteBy &&
-      updatedData?.CompleteBy !== ""
-    ) {
+    if (condition) {
       handleOk(updatedData);
       setUpdatedData(null);
     }
   };
 
   const onInputChange = (e: any, key: string) => {
-    setUpdatedData({ ...updatedData, [key]: e.target.value });
+    const { value } = e.target;
+
+    if (
+      key === "startedTime" &&
+      updatedData?.completedDate === updatedData?.startedDate &&
+      updatedData?.completedTime &&
+      value > updatedData?.completedTime
+    ) {
+      setUpdatedData({ ...updatedData, [key]: updatedData?.completedTime });
+    } else if (
+      key === "completedTime" &&
+      updatedData?.startedDate === updatedData?.completedDate &&
+      updatedData?.startedTime &&
+      value < updatedData?.startedTime
+    ) {
+      setUpdatedData({ ...updatedData, [key]: updatedData?.startedTime });
+    } else {
+      // Otherwise, update the time normally
+      setUpdatedData({ ...updatedData, [key]: value });
+    }
   };
 
   return (
@@ -74,6 +107,7 @@ const TodoModal: React.FC<TodoModalProps> = ({
       onCancel={() => {
         setVisible(false);
         setUpdatedData(null);
+        // window.location.reload();
       }}
     >
       <div
@@ -128,6 +162,7 @@ const TodoModal: React.FC<TodoModalProps> = ({
             placeholder="Enter Date"
             value={updatedData?.CompleteBy}
             onChange={(e) => onInputChange(e, "CompleteBy")}
+            min={new Date().toISOString().split("T")[0]}
           />
         </div>
       )}
@@ -150,6 +185,8 @@ const TodoModal: React.FC<TodoModalProps> = ({
               placeholder="Enter Start Date"
               value={updatedData?.startedDate}
               onChange={(e) => onInputChange(e, "startedDate")}
+              max={updatedData?.CompleteBy}
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
           <div
@@ -191,6 +228,8 @@ const TodoModal: React.FC<TodoModalProps> = ({
               placeholder="Enter Completed Date"
               value={updatedData?.completedDate}
               onChange={(e) => onInputChange(e, "completedDate")}
+              max={updatedData?.CompleteBy}
+              min={updatedData?.startedDate}
             />
           </div>
           <div
